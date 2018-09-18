@@ -13,13 +13,16 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import scraper.GameTitle;
 import scraper.Scraper;
-import websiteHelpers.Helpers;
+import websiteHelpers.AmazonHelpers;
+import websiteHelpers.GameHelpers;
+import websiteHelpers.TescoHelpers;
 
 public class Search extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	HtmlPage page = null;
 	Scraper scraper = new Scraper();
-	Helpers helper = new Helpers();
+	GameHelpers gameHelper = new GameHelpers();
+	TescoHelpers tescoHelper = new TescoHelpers();
     public Search() {
         super();
     }
@@ -30,7 +33,7 @@ public class Search extends HttpServlet {
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 		out.println("<html><head><title>Hello World!</title></head>");
-		out.println("<body><h1>Hello World!</h1></body></html>");
+		out.println("<body><h1>Hello World! This is the doGet method responding.</h1></body></html>");
 		System.out.println(name);
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 		response.getWriter().append("Parameters are: ").append(name);
@@ -38,19 +41,31 @@ public class Search extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		ArrayList<GameTitle> allData = new ArrayList<>();
 		ArrayList<GameTitle> data = new ArrayList<>();
+		ArrayList<GameTitle> tescoData = new ArrayList<>();
+		
 		String searchTerm = request.getParameter("searchTerm");
 		
-		String url = scraper.generateURL(searchTerm, "Game");
-		System.out.println(url);
-		page = scraper.getPage(url);
+		String[] companies = new String[2];
 		
-		if(page == null)
-			System.out.println("An error occured");
+		companies[0] = "Game";
+		companies[1] = "Tesco";
 		
-		data = helper.getGamePageData(page);			
+		for (int i = 0; i < companies.length; i++) {
+			String url = scraper.generateURL(searchTerm, companies[i]);			
+			page = scraper.getPage(url);
+			if(page == null)
+				System.out.println("An error occured");
+			if(companies[i] == "Game") {
+				data = gameHelper.getGamePageData(page);				
+			} else if(companies[i] == "Tesco") {
+				data = tescoHelper.getTescoPageData(page);
+			}
+				allData.addAll(data);
+		}
 		
-		request.setAttribute("data", data);
+		request.setAttribute("data", allData);
 		this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
 		
 	}

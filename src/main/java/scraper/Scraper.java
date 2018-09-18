@@ -10,7 +10,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
-import websiteHelpers.Helpers;
+import websiteHelpers.GameHelpers;
 
 public class Scraper {
 
@@ -18,6 +18,10 @@ public class Scraper {
 		String url = "";
 		if(website == "Game") {
 			url = WebsiteUrls.Game;			
+		} else if(website == "Amazon") {
+			url = WebsiteUrls.Amazon;
+		} else if(website == "Tesco") {
+			url = WebsiteUrls.Tesco;
 		}
 		String websiteName = url.replace("{REPLACEME}", URLEncoder.encode(searchQuery, "UTF-8"));		
 		System.out.println("website: " + websiteName);
@@ -40,15 +44,6 @@ public class Scraper {
 		client.close();
 		return null;
 		
-	}
-
-
-	public ArrayList<GameTitle> getPageData(HtmlPage pageData, String website) {
-		if(website == "Game") {
-			Helpers helpers = new Helpers();
-			ArrayList<GameTitle> result = helpers.getGamePageData(pageData);
-		}
-		return null;
 	}
 
 }

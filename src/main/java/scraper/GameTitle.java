@@ -4,12 +4,16 @@ public class GameTitle {
 	
 	private String name;
 	private String price;
+	private String console;
 	private String url;
+	private String image;
 	
-	public GameTitle(String name, String price, String url) {
+	public GameTitle(String name, String price, String console, String url, String image) {
 		this.name = name;
 		this.price = price;
-		this.url = url;				
+		this.console = console;
+		this.url = url;		
+		this.image = image;
 	}
 
 	public String getName() {
@@ -36,5 +40,20 @@ public class GameTitle {
 		this.url = url;
 	}
 	
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.name = image;
+	}
+	
+	public String getConsole() {
+		return console;
+	}
+
+	public void setConsole(String console) {
+		this.name = console;
+	}
 	
 }
